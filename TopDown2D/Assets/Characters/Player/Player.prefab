@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1
-  collisionOffset: 0.05
+  collisionOffset: 0.005
   movementFilter:
     useTriggers: 0
     useLayerMask: 0
@@ -149,6 +149,7 @@ MonoBehaviour:
     minNormalAngle: 0
     maxNormalAngle: 0
   swordAttack: {fileID: 4024867877763941596}
+  health: 100
 --- !u!50 &7051923298211284869
 Rigidbody2D:
   serializedVersion: 4
@@ -172,7 +173,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
@@ -208,7 +209,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.007560253, y: -0.15830842}
+  m_Offset: {x: 0.005, y: -0.165}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -219,7 +220,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.094427705, y: 0.03485906}
+  m_Size: {x: 0.121, y: 0.03485906}
   m_EdgeRadius: 0
 --- !u!95 &2268447156705988047
 Animator:
@@ -282,7 +283,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4726888518753425666}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -332,4 +333,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1614873c9a6ed84abc963b21391def0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDirection: 0
+  swordCollider: {fileID: 1885847448985811556}
+  damage: 3

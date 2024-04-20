@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
     public ContactFilter2D movementFilter;
     public SwordAttack swordAttack;
 
+    public float health = 100;
+    float timeLastHit = 0.0f;
+
     Vector2 movementInput;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
@@ -37,6 +40,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void FixedUpdate() {
+        timeLastHit += Time.deltaTime;
         if (canMove) {
             // If movement input is not 0, try to move
             if (movementInput != Vector2.zero) {
@@ -137,6 +141,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void StopSwordAttackHitbox() {
+        UnlockMovement();
         swordAttack.StopAttack();
     }
 
@@ -146,5 +151,28 @@ public class PlayerController : MonoBehaviour
 
     public void UnlockMovement() {
         canMove = true;
+    }
+
+    public void TakeDamage(float damage) {
+        if (timeLastHit > 0.35f) {
+            timeLastHit = 0.0f;
+            health -= damage;
+            // gör så att personen åker tillbaka lite
+
+            if (health <= 0) {
+                Dead();
+            }
+        }
+    }
+
+     public void Dead() {
+        animator.SetBool("isMoving", false);
+        animator.SetBool("frontMove", false);
+        animator.SetBool("backMove", false);
+        animator.SetBool("sideMove", false);
+        animator.SetTrigger("Dead");
+        canMove = false;
+
+        // Give it 3 seconds befoer end screen bla bla bla...
     }
 }
