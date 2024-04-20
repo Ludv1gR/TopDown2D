@@ -260,7 +260,7 @@ MonoBehaviour:
   health: 10
   damage: 5
   moveSpeed: 0.3
-  collisionOffset: 0.005
+  collisionOffset: 0.01
   movementFilter:
     useTriggers: 0
     useLayerMask: 0

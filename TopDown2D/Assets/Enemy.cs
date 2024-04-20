@@ -4,6 +4,7 @@ using System.Numerics;
 using UnityEditor;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class Enemy : MonoBehaviour
 {
@@ -11,7 +12,8 @@ public class Enemy : MonoBehaviour
     Animator animator;
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer;
-    Vector2 movementInput;
+    Vector2 moveDirection;
+    Transform playerTarget;
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
     public SlimeAttack slimeAttack;
     
@@ -28,14 +30,46 @@ public class Enemy : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>(); // TryMove (senare)
         spriteRenderer = GetComponent<SpriteRenderer>(); // flipX när den vänder sig (senare)
+        playerTarget = GameObject.Find("Player").transform;
     }
 
     void Update() {
         timeLastHit += Time.deltaTime;
+        if (playerTarget) {
+            Vector3 direction = (playerTarget.position - transform.position + new Vector3 (0f, -0.12f)).normalized;
+            moveDirection = direction;
+            if (direction.x < 0) {
+                spriteRenderer.flipX = true;
+            } else if (direction.x > 0) {
+                spriteRenderer.flipX = false;
+            }
+        }
     }
 
-    private void Move() {
-        // AI moving
+    void FixedUpdate() {
+        if (canMove) {
+            // If movement input is not 0, try to move
+            if (moveDirection != Vector2.zero) {
+                
+                bool success = Move(moveDirection);
+
+                if (!success) {
+                    success = Move(new Vector2(moveDirection.x, 0));
+                }
+                if (!success) {
+                        success = Move(new Vector2(0, moveDirection.y));
+                    }
+
+                animator.SetBool("isMoving", success);
+            } else {
+                animator.SetBool("isMoving", false);
+            }
+        }
+    }
+
+    private bool Move(Vector2 direction) {
+        rb.velocity = new Vector2(direction.x, direction.y) * moveSpeed;
+        return true;
     }
 
     public void TakeDamage(float damage) {
@@ -48,6 +82,14 @@ public class Enemy : MonoBehaviour
                 Defeated(); 
             }
         }
+    }
+
+    public void CantMove() {
+        canMove = false;
+    }
+
+    public void CanMove() {
+        canMove = true;
     }
 
     public void Defeated() {
