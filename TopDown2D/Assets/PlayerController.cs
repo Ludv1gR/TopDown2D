@@ -95,6 +95,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private bool TryMove(Vector2 direction) {
+        Physics2D.IgnoreLayerCollision(3, 6); // Player Enemies Layer ignore collision
         if (direction != Vector2.zero) {
             // Check for potential collisions
             int count = rb.Cast(
