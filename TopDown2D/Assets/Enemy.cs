@@ -18,8 +18,10 @@ public class Enemy : MonoBehaviour
     Transform playerTarget;
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
     public SlimeAttack slimeAttack;
+    FloatingHealthBar healthBar;
     
-    public float health = 10; // not acutal value
+    public float maxHealth = 10;
+    public float health = 10;
     public float damage = 5;
     float timeLastHit = 0.0f;
     public float moveSpeed = 0.8f;
@@ -27,7 +29,6 @@ public class Enemy : MonoBehaviour
     public float playerInRangeDistance = 0.5f;
     public float collisionOffset = 0.05f;
     public ContactFilter2D movementFilter;
-
     bool canMove = true;
 
     private void Start() {
@@ -38,6 +39,7 @@ public class Enemy : MonoBehaviour
         playerInRange = false;
         movementFilter.useLayerMask = true;
         movementFilter.layerMask = ~(1 << 3 | 1 << 6); // Ignore collisions between layers 3 and 6
+        healthBar = GetComponentInChildren<FloatingHealthBar>();
     }
 
     void Update() {
@@ -118,6 +120,7 @@ public class Enemy : MonoBehaviour
             timeLastHit = 0.0f;
             health -= damage;
             animator.SetTrigger("Hit");
+            healthBar.UpdateHealthBar(health, maxHealth);
 
             if (health <= 0) {
                 Defeated(); 
